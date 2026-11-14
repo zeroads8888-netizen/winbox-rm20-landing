@@ -1,17 +1,24 @@
 const video = document.querySelector('#dance');
+const music = document.querySelector('#music');
 const toggle = document.querySelector('#sound-toggle');
 const label = document.querySelector('#sound-label');
 let manuallyMuted = false;
+video.muted = true;
 function updateSound() {
-  const playing = !video.muted && !video.paused;
+  const playing = !music.muted && !music.paused;
   toggle.setAttribute('aria-pressed', String(playing));
   toggle.setAttribute('aria-label', playing ? '关闭音乐' : '开启音乐');
   label.textContent = playing ? '音乐已开启' : '开启音乐';
 }
+function alignDance() {
+  if (video.readyState >= 1 && Number.isFinite(video.duration) && video.duration > 0 && !music.paused) {
+    video.currentTime = music.currentTime % video.duration;
+  }
+}
 async function startWithSound() {
-  video.muted = false;
-  try { await video.play(); updateSound(); return true; }
-  catch (_) { video.muted = true; try { await video.play(); } catch (_) {} updateSound(); return false; }
+  music.muted = false;
+  try { await music.play(); updateSound(); return true; }
+  catch (_) { updateSound(); return false; }
 }
 function removeGestureListeners() {
   document.removeEventListener('pointerdown', onFirstGesture, true);
@@ -22,18 +29,22 @@ async function onFirstGesture(event) {
   if (await startWithSound()) removeGestureListeners();
 }
 toggle.addEventListener('click', async () => {
-  if (!video.muted && !video.paused) {
-    manuallyMuted = true; video.muted = true; removeGestureListeners();
+  if (!music.muted && !music.paused) {
+    manuallyMuted = true; music.muted = true; removeGestureListeners();
   } else {
     manuallyMuted = false;
     if (await startWithSound()) removeGestureListeners();
   }
   updateSound();
 });
-video.addEventListener('play', updateSound);
-video.addEventListener('pause', updateSound);
-video.addEventListener('volumechange', updateSound);
-video.addEventListener('error', () => { label.textContent = '播放失败，请刷新'; });
+music.addEventListener('play', updateSound);
+music.addEventListener('playing', alignDance);
+music.addEventListener('pause', updateSound);
+music.addEventListener('volumechange', updateSound);
+music.addEventListener('error', () => { label.textContent = '播放失败，请刷新'; });
+video.addEventListener('loadeddata', alignDance);
 document.addEventListener('pointerdown', onFirstGesture, true);
 document.addEventListener('keydown', onFirstGesture, true);
+// The small audio file starts independently; video download never blocks music.
 startWithSound().then(success => { if (success) removeGestureListeners(); });
+video.play().catch(() => {});

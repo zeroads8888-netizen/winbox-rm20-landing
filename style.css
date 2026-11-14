@@ -3,3 +3,16 @@
 html{background:#031128}body{position:relative;isolation:isolate;background:transparent;min-height:100vh}body:before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:#031128 url('storm-clouds.png') center center/cover no-repeat}.page{background:transparent;border:0;border-radius:0;box-shadow:none}.storm{display:none}.offer{mix-blend-mode:normal}
 /* Keep the original icon and place the transparent cyan wordmark beside it. */
 header{justify-content:space-between;gap:16px}.brand-lockup{display:flex;align-items:center;gap:12px;min-width:0}.wordmark{display:block;width:clamp(145px,46vw,250px);height:auto;object-fit:contain}.sound-toggle{position:static;flex-shrink:0;margin-left:auto}@media(max-width:480px){header{padding:20px;min-height:104px;gap:10px}.brand-lockup{gap:10px}.logo{width:56px;height:56px;border-radius:14px}.sound-toggle{width:34px;height:34px;padding:0;justify-content:center}.sound-toggle #sound-label{display:none}}@media(max-width:350px){.logo{width:46px;height:46px;border-radius:11px}.brand-lockup{gap:8px}}
+/* Fit the complete promotion and claim action within a mobile screen. */
+@media(max-width:699px){
+ body{padding:0;min-height:100svh}.page{height:100svh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);overflow:hidden}
+ header{flex:0 0 56px;min-height:56px;padding:8px 18px;gap:10px}.brand-lockup{gap:8px}.logo{width:36px;height:36px;border-radius:9px}.wordmark{width:155px}.sound-toggle{width:32px;height:32px;padding:0;justify-content:center}.sound-toggle #sound-label{display:none}
+ .hero{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,.68fr) minmax(0,1fr) 50px;gap:12px;padding:0 18px calc(14px + env(safe-area-inset-bottom))}
+ .offer{width:auto;height:100%;max-width:100%;max-height:100%;object-fit:contain;margin:0;justify-self:center}
+ .stage{height:100%;width:auto;max-width:100%;aspect-ratio:9/16;min-height:0;margin:0;justify-self:center;border-radius:18px}.stage video{object-fit:contain}
+ .claim{height:50px;min-height:50px;align-self:center;width:94%;margin:0 auto;padding:8px 18px;font-size:22px}.gem{font-size:23px}
+}
+/* A continuous, gentle zoom draws attention to the claim action. */
+.claim{animation:claim-pulse 1.5s ease-in-out infinite;transform-origin:center}
+@keyframes claim-pulse{0%,100%{transform:scale(.96);filter:brightness(1)}50%{transform:scale(1.025);filter:brightness(1.12)}}
+@media(prefers-reduced-motion:reduce){.claim{animation:none}}
