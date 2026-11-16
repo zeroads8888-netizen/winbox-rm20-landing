@@ -2,7 +2,6 @@ const video = document.querySelector('#dance');
 const music = document.querySelector('#music');
 const toggle = document.querySelector('#sound-toggle');
 const label = document.querySelector('#sound-label');
-const claimCta = document.querySelector('#claim-cta');
 let manuallyMuted = false;
 video.muted = true;
 function updateSound() {
@@ -49,16 +48,3 @@ document.addEventListener('keydown', onFirstGesture, true);
 // The small audio file starts independently; video download never blocks music.
 startWithSound().then(success => { if (success) removeGestureListeners(); });
 video.play().catch(() => {});
-
-claimCta.addEventListener('click', (event) => {
-  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  event.preventDefault();
-  const destination = claimCta.href;
-  if (typeof window.fbq === 'function') {
-    window.fbq('track', 'CompleteRegistration', {
-      value: 20.00,
-      currency: 'MYR'
-    });
-  }
-  window.setTimeout(() => window.location.assign(destination), 250);
-});
