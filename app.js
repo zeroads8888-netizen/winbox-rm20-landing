@@ -56,6 +56,7 @@ claimCta.addEventListener('click', (event) => {
   const destination = claimCta.href;
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'CompleteRegistration');
+    window.fbq('track', 'Contact');
   }
   window.setTimeout(() => window.location.assign(destination), 250);
 });
